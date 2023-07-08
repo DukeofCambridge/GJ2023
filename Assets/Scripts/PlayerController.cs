@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -37,6 +38,10 @@ public class PlayerController : MonoBehaviour
             transform.position = newPosition;
             StartCoroutine(PauseTrail());
         }
+        if (GetComponent<SpriteRenderer>().color.a < 0.1f)
+        {
+            Debug.Log("GAME OVER");
+        }
     }
 
     private void FixedUpdate()
@@ -47,6 +52,8 @@ public class PlayerController : MonoBehaviour
         KillOrthogonalVelocity();
         // steer the direction
         ApplySteeringForce();
+        // judge if the player stops
+        SlowDie();
     }
 
     void ApplyAccForce()
@@ -98,7 +105,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator PauseTrail()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.6f);
         _trailRenderer.enabled = true;
     }
 
@@ -112,6 +119,32 @@ public class PlayerController : MonoBehaviour
         {
             Vector2 drawDir = (other.GetComponent<Transform>().position - transform.position).normalized;
             _rigidbody2D.AddForce(drawDir*Settings.GravityFactor, ForceMode2D.Force);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Gravity"))
+        {
+            Vector2 drawDir = (other.GetComponent<Transform>().position - transform.position).normalized;
+            _rigidbody2D.AddForce(drawDir*GameObject.Find("GravityField").GetComponent<PlanetManager>().gravity*0.8f, ForceMode2D.Impulse);
+            //other.GetComponent<SpriteRenderer>().DOColor(new Color(1, 1, 1, 1), 0.5f);
+        }
+    }
+    
+    /// <summary>
+    /// broom inserted into planet and you cannot leave!
+    /// </summary>
+    private void SlowDie()
+    {
+        if (_rigidbody2D.velocity == Vector2.zero)
+        {
+            GetComponent<SpriteRenderer>().DOFade(0f, 5f);
+        }
+        else
+        {
+            DOTween.KillAll();
+            GetComponent<SpriteRenderer>().DOFade(1f, 0.6f);
         }
     }
 }

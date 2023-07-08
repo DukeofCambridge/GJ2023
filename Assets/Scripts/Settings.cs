@@ -5,12 +5,24 @@ using UnityEngine;
 
 public class Settings
 {
-    
+    // Player Settings
     [Header("初始速度")] public const float InitialSpeed = 2f;
     [Header("加速度因子")] public const float AccFactor = 10f;
     [Header("转向因子")] public const float TurnFactor = 3.5f;
     [Header("漂移因子")] public const float DriftFactor = 0.95f;  // decide how fast the lateral velocity will decrease
-    [Header("最大速度")] public const float MaxSpeed = 20f;
-    [Header("最小速度")] public const float MinSpeed = 2f;
-    [Header("引力因子")] public const float GravityFactor = 5f;
+    [Header("最大速度")] public const float MaxSpeed = 12f;
+    [Header("最小速度")] public const float MinSpeed = 4f;
+    
+    // Planet Settings
+    [Header("引力因子")] public const float GravityFactor = 4f;
+    
+    // Meteor Settings
+    [Header("刷新间隔")] public const float ShootInterval = 2.5f;
+    [Header("最大流星数量")] public const int MaxNum = 3;
+    [Header("流星最小速度")] public const float MinV = 2f;
+    [Header("流星最大速度")] public const float MaxV = 6f;
+    [Header("流星最多跨越边界次数")] public const int WrapHp = 3;
+    
+    // Game Settings
+    [Header("胜利所需星星数")] public const int Victory = 30;
 }
