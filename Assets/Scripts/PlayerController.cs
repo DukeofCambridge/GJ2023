@@ -19,19 +19,23 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // acceleration
         ApplyAccForce();
+        // kill the lateral velocity to realize drift effects
+        KillOrthogonalVelocity();
+        // steer the rotation
         ApplySteeringForce();
     }
 
     void ApplyAccForce()
     {
-        Vector2 forceFactor = transform.up * _accInput * Settings.Acc;
+        Vector2 forceFactor = transform.up * _accInput * Settings.AccFactor;
         _rigidbody2D.AddForce(forceFactor,ForceMode2D.Force);
     }
 
     void ApplySteeringForce()
     {
-        _rotationAngle -= _steeringInput * Settings.Turn;
+        _rotationAngle -= _steeringInput * Settings.TurnFactor;
         _rigidbody2D.MoveRotation(_rotationAngle);
     }
 
@@ -40,5 +44,12 @@ public class PlayerController : MonoBehaviour
         _steeringInput = inputVector.x;
         _accInput = inputVector.y;
     }
-    
+
+    void KillOrthogonalVelocity()
+    {
+        Vector2 forwardVelocity = transform.up * Vector2.Dot(_rigidbody2D.velocity, transform.up);
+        Vector2 lateralVelocity = transform.right * Vector2.Dot(_rigidbody2D.velocity, transform.right);
+
+        _rigidbody2D.velocity = forwardVelocity + lateralVelocity * Settings.DriftFactor;
+    }
 }
