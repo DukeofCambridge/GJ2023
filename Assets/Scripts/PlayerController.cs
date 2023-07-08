@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         ApplyAccForce();
         // slow the lateral velocity to realize drift effects
         KillOrthogonalVelocity();
-        // steer the rotation
+        // steer the direction
         ApplySteeringForce();
     }
 
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
             return;
         if (_velocityForward < Settings.MinSpeed && _accInput < 0)
             return;
-        // limit the range of all-direction velocity of player
+        // limit the range of overall velocity of player
         if (_rigidbody2D.velocity.sqrMagnitude > Mathf.Pow(Settings.MaxSpeed,2) && _accInput > 0)
             return;
         // slow the player when acceleration is not applied
@@ -100,5 +100,18 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         _trailRenderer.enabled = true;
+    }
+
+    /// <summary>
+    /// In the gravity field of a planet
+    /// </summary>
+    /// <param name="other"></param>
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Gravity"))
+        {
+            Vector2 drawDir = (other.GetComponent<Transform>().position - transform.position).normalized;
+            _rigidbody2D.AddForce(drawDir*Settings.GravityFactor, ForceMode2D.Force);
+        }
     }
 }
