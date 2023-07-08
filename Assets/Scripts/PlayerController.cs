@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -12,10 +13,30 @@ public class PlayerController : MonoBehaviour
     private float _steeringInput;
     private float _rotationAngle;
     private float _velocityForward;
+    public ScreenBounds screenBounds;
+    private TrailRenderer _trailRenderer;
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _trailRenderer = GetComponentInChildren<TrailRenderer>();
+    }
+
+    private void Start()
+    {
+        _rigidbody2D.velocity = transform.up * Settings.MinSpeed;
+    }
+
+    private void Update()
+    {
+        // screen wrap effects
+        if (screenBounds.AmIOutOfBounds(transform.position))
+        {
+            _trailRenderer.enabled = false;
+            Vector2 newPosition = screenBounds.CalculateWrappedPosition(transform.position);
+            transform.position = newPosition;
+            StartCoroutine(PauseTrail());
+        }
     }
 
     private void FixedUpdate()
@@ -40,7 +61,7 @@ public class PlayerController : MonoBehaviour
         if (_rigidbody2D.velocity.sqrMagnitude > Mathf.Pow(Settings.MaxSpeed,2) && _accInput > 0)
             return;
         // slow the player when acceleration is not applied
-        if (_accInput == 0)
+        if (_accInput == 0 && _velocityForward > Settings.MinSpeed)
         {
             _rigidbody2D.drag = Mathf.Lerp(_rigidbody2D.drag, 3f, Time.fixedDeltaTime * 3);
         }
@@ -73,5 +94,11 @@ public class PlayerController : MonoBehaviour
         Vector2 lateralVelocity = transform.right * Vector2.Dot(_rigidbody2D.velocity, transform.right);
         // slow the lateral velocity to realize drift effects
         _rigidbody2D.velocity = forwardVelocity + lateralVelocity * Settings.DriftFactor;
+    }
+
+    private IEnumerator PauseTrail()
+    {
+        yield return new WaitForSeconds(0.5f);
+        _trailRenderer.enabled = true;
     }
 }
