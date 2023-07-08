@@ -38,6 +38,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 3572936205
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Trails
+    uniqueID: 1880896121
+    locked: 0
+  - name: Player
+    uniqueID: 1047065979
     locked: 0

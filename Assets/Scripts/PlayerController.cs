@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private float _accInput;
     private float _steeringInput;
     private float _rotationAngle;
+    private float _velocityForward;
 
     private void Awake()
     {
@@ -21,7 +22,7 @@ public class PlayerController : MonoBehaviour
     {
         // acceleration
         ApplyAccForce();
-        // kill the lateral velocity to realize drift effects
+        // slow the lateral velocity to realize drift effects
         KillOrthogonalVelocity();
         // steer the rotation
         ApplySteeringForce();
@@ -29,13 +30,34 @@ public class PlayerController : MonoBehaviour
 
     void ApplyAccForce()
     {
+        // limit the range of the forward velocity of player
+        _velocityForward = Vector2.Dot(_rigidbody2D.velocity, transform.up);
+        if (_velocityForward > Settings.MaxSpeed && _accInput > 0)
+            return;
+        if (_velocityForward < Settings.MinSpeed && _accInput < 0)
+            return;
+        // limit the range of all-direction velocity of player
+        if (_rigidbody2D.velocity.sqrMagnitude > Mathf.Pow(Settings.MaxSpeed,2) && _accInput > 0)
+            return;
+        // slow the player when acceleration is not applied
+        if (_accInput == 0)
+        {
+            _rigidbody2D.drag = Mathf.Lerp(_rigidbody2D.drag, 3f, Time.fixedDeltaTime * 3);
+        }
+        else
+        {
+            _rigidbody2D.drag = 0;
+        }
         Vector2 forceFactor = transform.up * _accInput * Settings.AccFactor;
         _rigidbody2D.AddForce(forceFactor,ForceMode2D.Force);
     }
 
     void ApplySteeringForce()
     {
-        _rotationAngle -= _steeringInput * Settings.TurnFactor;
+        // limit the ability to turn when moving slowly
+        float minVelocityAllowingTurn = (_rigidbody2D.velocity.magnitude / 8);
+        minVelocityAllowingTurn = Mathf.Clamp01(minVelocityAllowingTurn);
+        _rotationAngle -= _steeringInput * Settings.TurnFactor * minVelocityAllowingTurn;
         _rigidbody2D.MoveRotation(_rotationAngle);
     }
 
@@ -49,7 +71,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 forwardVelocity = transform.up * Vector2.Dot(_rigidbody2D.velocity, transform.up);
         Vector2 lateralVelocity = transform.right * Vector2.Dot(_rigidbody2D.velocity, transform.right);
-
+        // slow the lateral velocity to realize drift effects
         _rigidbody2D.velocity = forwardVelocity + lateralVelocity * Settings.DriftFactor;
     }
 }
