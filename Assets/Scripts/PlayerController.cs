@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     private float _steeringInput;
     private float _rotationAngle;
     private float _velocityForward;
-    public ScreenBounds screenBounds;
+    //public ScreenBounds screenBounds;
     private TrailRenderer _trailRenderer;
 
     private void Awake()
@@ -31,13 +31,13 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         // screen wrap effects
-        if (screenBounds.AmIOutOfBounds(transform.position))
+        /*if (screenBounds.AmIOutOfBounds(transform.position))
         {
             _trailRenderer.enabled = false;
             Vector2 newPosition = screenBounds.CalculateWrappedPosition(transform.position);
             transform.position = newPosition;
             StartCoroutine(PauseTrail());
-        }
+        }*/
         if (GetComponent<SpriteRenderer>().color.a < 0.1f)
         {
             Debug.Log("GAME OVER");

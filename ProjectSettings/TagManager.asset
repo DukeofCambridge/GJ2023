@@ -53,3 +53,6 @@ TagManager:
   - name: Player
     uniqueID: 1047065979
     locked: 0
+  - name: Mask
+    uniqueID: 1728891995
+    locked: 0

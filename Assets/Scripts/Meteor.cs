@@ -9,37 +9,15 @@ public class Meteor : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private TrailRenderer _trailRenderer;
     private int _hp = 0;
-    public ScreenBounds screenBounds;
+    //public ScreenBounds screenBounds;
     public MeteorManager _meteorManager;
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
-        screenBounds = GameObject.FindWithTag("ScreenBound").GetComponent<ScreenBounds>();
+        //screenBounds = GameObject.FindWithTag("ScreenBound").GetComponent<ScreenBounds>();
     }
-    private void Update()
-    {
-        // screen wrap effects
-        if (screenBounds.AmIOutOfBounds(transform.position))
-        {
-            ++_hp;
-            if (_hp >= Settings.WrapHp)
-            {
-                _hp = 0;
-                Destroy(gameObject);
-                _meteorManager.curNum -= 1;
-            }
-            else
-            {
-                //Debug.Log("hp增加了");
-                ++_hp;
-                _trailRenderer.enabled = false;
-                Vector2 newPosition = screenBounds.CalculateWrappedPosition(transform.position);
-                transform.position = newPosition;
-                StartCoroutine(PauseTrail());
-            }
-        }
-    }
+
     public void Start_Move(Vector2 dir)
     {
         _rigidbody.velocity = dir * Random.Range(Settings.MinV, Settings.MaxV);
@@ -73,7 +51,28 @@ public class Meteor : MonoBehaviour
             StartCoroutine(Start_MeteorDead());
         }
     }
-    
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        
+        if (other.CompareTag("ScreenBound"))
+        {
+            ++_hp;
+            if (_hp >= Settings.WrapHp)
+            {
+                _hp = 0;
+                Destroy(gameObject);
+                _meteorManager.curNum -= 1;
+            }
+            else
+            {
+                //Debug.Log("hp增加了");
+                ++_hp;
+                _trailRenderer.enabled = false;
+                transform.position *= -Vector2.one;
+                StartCoroutine(PauseTrail());
+            }
+        }
+    }
     private IEnumerator PauseTrail()
     {
         yield return new WaitForSeconds(0.6f);
