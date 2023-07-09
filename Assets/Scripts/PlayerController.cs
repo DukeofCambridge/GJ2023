@@ -137,13 +137,13 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void SlowDie()
     {
-        if (_rigidbody2D.velocity == Vector2.zero)
+        if (_rigidbody2D.velocity.magnitude <= Vector2.one.magnitude*0.1f)
         {
             GetComponent<SpriteRenderer>().DOFade(0f, 5f);
         }
         else
         {
-            DOTween.KillAll();
+            //DOTween.KillAll();
             GetComponent<SpriteRenderer>().DOFade(1f, 0.6f);
         }
     }
