@@ -18,9 +18,27 @@ public class GameManager : MonoBehaviour
     public GameObject gameOver;
     public GameObject victory;
     public GameObject tutorial;
+    public AudioSource source;
+    public AudioClip clip;
+    public AudioClip clip1;
+    public AudioClip introMusic;
+    public AudioClip mainMusic;
+    public GameObject audioManager;
 
     public GameObject level1Prefab;
     public GameObject level1Instance;
+
+    private void Awake()
+    {
+        source = gameObject.AddComponent<AudioSource>();
+        source.playOnAwake = false;
+        clip = Resources.Load<AudioClip>("ClickButton");
+        clip1 = Resources.Load<AudioClip>("TouchMeteor");
+        introMusic = Resources.Load<AudioClip>("Touch The Star Begin");
+        mainMusic = Resources.Load<AudioClip>("Touch The Star Main");
+        audioManager = GameObject.Find("AudioManager");
+    }
+
     public void Begin()
     {
         level1Instance = Instantiate(level1Prefab, Vector3.zero, quaternion.identity);
@@ -33,6 +51,8 @@ public class GameManager : MonoBehaviour
 
     public void GoHome()
     {
+        source.clip = clip;
+        source.Play();
         StartCoroutine(Home());
     }
 
@@ -48,6 +68,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator Go()
     {
+        source.clip = clip1;
+        source.Play();
         start.GetComponent<SpriteRenderer>().DOFade(0f, 2f);
         Square.GetComponent<SpriteRenderer>().color = new Color(0, 0 ,0, 1);
         tutorial.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
@@ -62,7 +84,8 @@ public class GameManager : MonoBehaviour
         Square.GetComponent<SpriteRenderer>().DOFade(0f, 2f);
         tutorial.GetComponent<SpriteRenderer>().DOFade(0f, 1f);
         yield return new WaitForSeconds(2f);
-        
+        audioManager.GetComponent<AudioSource>().clip = mainMusic;
+        audioManager.GetComponent<AudioSource>().Play();
         home.SetActive(true);
         Square.SetActive(false);
         
@@ -82,6 +105,8 @@ public class GameManager : MonoBehaviour
         
         yield return new WaitForSeconds(2f);
         Destroy(level1Instance);
+        audioManager.GetComponent<AudioSource>().clip = introMusic;
+        audioManager.GetComponent<AudioSource>().Play();
         GameObject[] ms = GameObject.FindGameObjectsWithTag("Meteor");
         foreach (var m in ms)
         {

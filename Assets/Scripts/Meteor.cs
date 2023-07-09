@@ -15,12 +15,19 @@ public class Meteor : MonoBehaviour
     public MeteorManager meteorManager;
     public GameObject soundPrefab;
     public bool isRun = false;
+    public AudioSource source;
+    public AudioClip clip1;
+    public AudioClip clip2;
     
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         //screenBounds = GameObject.FindWithTag("ScreenBound").GetComponent<ScreenBounds>();
+        source = gameObject.AddComponent<AudioSource>();
+        source.playOnAwake = false;
+        clip1 = Resources.Load<AudioClip>("MeteorDisappear");
+        clip2 = Resources.Load<AudioClip>("TouchMeteor");
     }
 
     public void Start_Move(Vector2 dir)
@@ -48,12 +55,16 @@ public class Meteor : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
+            source.clip = clip2;
+            source.Play();
             Instantiate(soundPrefab, transform.position, quaternion.identity);
             StartCoroutine(Start_MeteorDead());
             meteorManager.touchNum += 1;
         }
         if (other.CompareTag("Planet"))
         {
+            source.clip = clip1;
+            source.Play();
             StartCoroutine(Start_MeteorDead());
         }
     }
