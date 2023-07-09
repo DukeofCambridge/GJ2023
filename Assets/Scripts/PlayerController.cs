@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     //public ScreenBounds screenBounds;
     private TrailRenderer _trailRenderer;
     public bool isRun = false;
+    private bool ended = false;
 
     private void Awake()
     {
@@ -39,9 +40,11 @@ public class PlayerController : MonoBehaviour
             transform.position = newPosition;
             StartCoroutine(PauseTrail());
         }*/
-        if (GetComponent<SpriteRenderer>().color.a < 0.1f)
+        if (GetComponent<SpriteRenderer>().color.a < 0.1f && !ended)
         {
             Debug.Log("GAME OVER");
+            GameObject.Find("GameManager").GetComponent<GameManager>().GameOver();
+            ended = true;
         }
     }
 

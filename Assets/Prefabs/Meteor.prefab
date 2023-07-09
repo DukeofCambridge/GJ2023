@@ -155,7 +155,7 @@ GameObject:
   - component: {fileID: 1959497803193223345}
   m_Layer: 0
   m_Name: Meteor
-  m_TagString: Untagged
+  m_TagString: Meteor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -258,6 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meteorManager: {fileID: 0}
   soundPrefab: {fileID: 6116528785510617572, guid: 77430b9b200839349b2e003088d7bc3b, type: 3}
+  isRun: 0
 --- !u!50 &1959497803193223345
 Rigidbody2D:
   serializedVersion: 4

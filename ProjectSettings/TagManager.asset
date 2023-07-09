@@ -9,6 +9,7 @@ TagManager:
   - Planet
   - SoundWave
   - CheckPoint
+  - Meteor
   layers:
   - Default
   - TransparentFX

@@ -15,6 +15,7 @@ public class MeteorManager : MonoBehaviour
 
     private void Start()
     {
+        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         StartCoroutine(Init_NewStar());
     }
 
