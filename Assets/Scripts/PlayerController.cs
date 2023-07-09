@@ -139,7 +139,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_rigidbody2D.velocity.magnitude <= Vector2.one.magnitude*0.1f)
         {
-            GetComponent<SpriteRenderer>().DOFade(0f, 5f);
+            GetComponent<SpriteRenderer>().DOFade(0f, Settings.DieTime);
         }
         else
         {

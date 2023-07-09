@@ -341,7 +341,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc8a4651a4ca7cd4f8561fc6ff9c64a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenBounds: {fileID: 0}
+  meteorManager: {fileID: 0}
+  soundPrefab: {fileID: 6116528785510617572, guid: 77430b9b200839349b2e003088d7bc3b, type: 3}
 --- !u!50 &1959497803193223345
 Rigidbody2D:
   serializedVersion: 4

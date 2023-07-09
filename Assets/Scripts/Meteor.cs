@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using DG.Tweening;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class Meteor : MonoBehaviour
@@ -10,7 +12,8 @@ public class Meteor : MonoBehaviour
     private TrailRenderer _trailRenderer;
     private int _hp = 0;
     //public ScreenBounds screenBounds;
-    public MeteorManager _meteorManager;
+    public MeteorManager meteorManager;
+    public GameObject soundPrefab;
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -43,8 +46,9 @@ public class Meteor : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
+            Instantiate(soundPrefab, transform.position, quaternion.identity);
             StartCoroutine(Start_MeteorDead());
-            _meteorManager.touchNum += 1;
+            meteorManager.touchNum += 1;
         }
         if (other.CompareTag("Planet"))
         {
@@ -61,15 +65,18 @@ public class Meteor : MonoBehaviour
             {
                 _hp = 0;
                 Destroy(gameObject);
-                _meteorManager.curNum -= 1;
+                meteorManager.curNum -= 1;
             }
             else
             {
                 //Debug.Log("hp增加了");
-                ++_hp;
-                _trailRenderer.enabled = false;
-                transform.position *= -Vector2.one;
-                StartCoroutine(PauseTrail());
+                if (GetComponent<CircleCollider2D>().enabled)
+                {
+                    ++_hp;
+                    _trailRenderer.enabled = false;
+                    transform.position *= -Vector2.one;
+                    StartCoroutine(PauseTrail());
+                }
             }
         }
     }
@@ -86,7 +93,7 @@ public class Meteor : MonoBehaviour
         transform.DOScale(new Vector3(2, 2, 0), 1f);
         //Debug.Log("调用！");
         yield return new WaitForSeconds(1f);
-        _meteorManager.curNum -= 1;
+        meteorManager.curNum -= 1;
         Destroy(gameObject);
     }
 

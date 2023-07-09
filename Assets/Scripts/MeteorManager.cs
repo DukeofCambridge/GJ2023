@@ -28,7 +28,7 @@ public class MeteorManager : MonoBehaviour
                 Vector3 startPos = Return_PosByType(type);
                 Vector3 endPos = Return_EndPosByStartType(type);
                 GameObject newStar = Instantiate(meteorPrefab, startPos, quaternion.identity);
-                newStar.GetComponent<Meteor>()._meteorManager = this;
+                newStar.GetComponent<Meteor>().meteorManager = this;
                 ++curNum;
                 //Debug.Log(curNum);
                 Vector2 dir = (endPos - startPos).normalized;
@@ -60,26 +60,26 @@ public class MeteorManager : MonoBehaviour
         float posY = 0;
         // radius == half of the screen height
         float h = mainCamera.orthographicSize;
-        float w = h * mainCamera.aspect;
+        //float w = h * mainCamera.aspect;
 
         if (type == 1)
         {
-            posX = w*0.95f;
+            posX = h*0.95f;
             posY = Random.Range(-h*0.8f, h*0.8f);
         }
         else if (type == 2)
         {
-            posX = -w*0.95f;
+            posX = -h*0.95f;
             posY = Random.Range(-h*0.8f, h*0.8f);
         }
         else if (type == 3)
         {
-            posX = Random.Range(-w*0.8f, w*0.8f);
+            posX = Random.Range(-h*0.8f, h*0.8f);
             posY = h*0.95f;
         }
         else if (type == 4)
         {
-            posX = Random.Range(-w*0.8f, w*0.8f);
+            posX = Random.Range(-h*0.8f, h*0.8f);
             posY = -h*0.95f;
         }
 

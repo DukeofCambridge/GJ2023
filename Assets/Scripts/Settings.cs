@@ -24,5 +24,7 @@ public class Settings
     [Header("流星最多跨越边界次数")] public const int WrapHp = 3;
     
     // Game Settings
-    [Header("胜利所需星星数")] public const int Victory = 30;
+    [Header("扫帚插星球死亡计时")] public const float DieTime = 5f;
+    [Header("音波扩散大小(决定游戏难度)")] public const float SoundScale = 5f;
+    [Header("引力强度提升1所需秒数")] public const float EnhanceInterval = 10000f;
 }

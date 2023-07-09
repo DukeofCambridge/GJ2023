@@ -7,6 +7,8 @@ TagManager:
   - Gravity
   - ScreenBound
   - Planet
+  - SoundWave
+  - CheckPoint
   layers:
   - Default
   - TransparentFX

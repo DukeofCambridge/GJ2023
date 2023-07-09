@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlanetManager : MonoBehaviour
 {
     private float timer = 0;
-    private float delayTime = 5;
+    private float delayTime = Settings.EnhanceInterval;
     public float gravity;
     private SpriteRenderer _spriteRenderer;
 
