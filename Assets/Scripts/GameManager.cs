@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public CheckList checkList;
     public GameObject gameOver;
     public GameObject victory;
+    public GameObject tutorial;
 
     public GameObject level1Prefab;
     public GameObject level1Instance;
@@ -48,15 +49,20 @@ public class GameManager : MonoBehaviour
     private IEnumerator Go()
     {
         start.GetComponent<SpriteRenderer>().DOFade(0f, 2f);
+        Square.GetComponent<SpriteRenderer>().color = new Color(0, 0 ,0, 1);
+        tutorial.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
         yield return new WaitForSeconds(2f);
         start.SetActive(false);
         Button.transform.DOMoveY(16f, 2f);
         yield return new WaitForSeconds(2f);
         Button.SetActive(false);
         
-        
+        tutorial.GetComponent<SpriteRenderer>().DOFade(1f, 1f);
+        yield return new WaitForSeconds(4f);
         Square.GetComponent<SpriteRenderer>().DOFade(0f, 2f);
+        tutorial.GetComponent<SpriteRenderer>().DOFade(0f, 1f);
         yield return new WaitForSeconds(2f);
+        
         home.SetActive(true);
         Square.SetActive(false);
         
