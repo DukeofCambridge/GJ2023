@@ -11,6 +11,7 @@ public class MeteorManager : MonoBehaviour
     public Camera mainCamera;
     public int curNum = 0;
     public int touchNum = 0;
+    public bool isRun = false;
 
     private void Start()
     {
@@ -19,7 +20,7 @@ public class MeteorManager : MonoBehaviour
 
     private IEnumerator Init_NewStar()
     {
-        while (true)
+        while (isRun)
         {
             yield return new WaitForSeconds(Settings.ShootInterval);
             if (curNum < Settings.MaxNum)
@@ -35,6 +36,7 @@ public class MeteorManager : MonoBehaviour
                 newStar.SetActive(true);
                 newStar.GetComponent<Meteor>().Start_Move(dir);
             }
+
         }
     }
 
@@ -84,5 +86,15 @@ public class MeteorManager : MonoBehaviour
         }
 
         return new Vector2(posX, posY);
+    }
+    public void Run()
+    {
+        isRun = true;
+        StartCoroutine(Init_NewStar());
+    }
+
+    public void Stop()
+    {
+        isRun = false;
     }
 }

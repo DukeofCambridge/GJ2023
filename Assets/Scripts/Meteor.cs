@@ -14,6 +14,8 @@ public class Meteor : MonoBehaviour
     //public ScreenBounds screenBounds;
     public MeteorManager meteorManager;
     public GameObject soundPrefab;
+    public bool isRun = false;
+    
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();

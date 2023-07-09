@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private float _velocityForward;
     //public ScreenBounds screenBounds;
     private TrailRenderer _trailRenderer;
+    public bool isRun = false;
 
     private void Awake()
     {
@@ -25,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        _rigidbody2D.velocity = transform.up * Settings.MinSpeed;
+        //_rigidbody2D.velocity = transform.up * Settings.MinSpeed;
     }
 
     private void Update()
@@ -46,14 +47,17 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // acceleration
-        ApplyAccForce();
-        // slow the lateral velocity to realize drift effects
-        KillOrthogonalVelocity();
-        // steer the direction
-        ApplySteeringForce();
-        // judge if the player stops
-        SlowDie();
+        if (isRun)
+        {
+            // acceleration
+            ApplyAccForce();
+            // slow the lateral velocity to realize drift effects
+            KillOrthogonalVelocity();
+            // steer the direction
+            ApplySteeringForce();
+            // judge if the player stops
+            SlowDie();
+        }
     }
 
     void ApplyAccForce()
@@ -146,5 +150,17 @@ public class PlayerController : MonoBehaviour
             //DOTween.KillAll();
             GetComponent<SpriteRenderer>().DOFade(1f, 0.6f);
         }
+    }
+
+    public void Run()
+    {
+        isRun = true;
+        _rigidbody2D.velocity = transform.up * Settings.MinSpeed;
+    }
+
+    public void Stop()
+    {
+        isRun = false;
+        _rigidbody2D.velocity = Vector2.zero;
     }
 }
